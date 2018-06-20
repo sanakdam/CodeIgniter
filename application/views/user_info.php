@@ -1,17 +1,5 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title><?php echo $name ?></title>
-</head>
-<body>
-	<img src="<?php echo $profile_image_url_https; ?>"> <br>
-	Name : <?php echo $name; ?> <br>
-	Username : <?php echo "@" . $screen_name; ?> <br>
-	Location : <?php echo $location != ""? $location : "Not Set"; ?> <br>
-	Description : <?php echo $description; ?>
-</body>
-</html>
+<img src="<?php echo $data->profile_image_url_https; ?>"> <br>
+Name : <?php echo $data->name; ?> <br>
+Username : <?php echo "@" . $data->screen_name; ?> <br>
+Location : <?php echo $data->location != ""? $data->location : "Not Set"; ?> <br>
+Description : <?php echo $data->description; ?>

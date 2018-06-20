@@ -23,7 +23,34 @@ class Twitter extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('admin_info', $this->user);
+		$user = array();
+		$user = $this->user;
+		$user->title = "Overview";
+		$this->load->view("header", $user);
+		$this->load->view("admin_info", $user);
+		$this->load->view("footer");
+	}
+
+	public function input()
+	{
+		$user = array();
+		$data = array();
+		$user = $this->user;
+		$user->title = "Input Data";
+		$this->load->view("header", $user);
+		$this->load->view("input");
+		$this->load->view("footer");
+	}
+
+	public function category()
+	{
+		$user = array();
+		$data = array();
+		$user = $this->user;
+		$user->title = "Category Data";
+		$this->load->view("header", $user);
+		$this->load->view("category");
+		$this->load->view("footer");
 	}
 
 	public function admin_timeline()
@@ -32,24 +59,33 @@ class Twitter extends CI_Controller {
 		var_dump($timeline);
 	}
 
-	public function user_timeline($username)
+	public function user_analyze()
 	{
-		$timeline = $this->connection->get("statuses/user_timeline", ["count" => 25, "screen_name" => $username, "exclude_replies" => true]);
+		$username = $this->input->get('username', TRUE);
+		$timeline = $this->connection->get("statuses/user_timeline", ["screen_name" => $username, "exclude_replies" => true]);
 
 		var_dump($timeline);
 	}
 
-	public function user_search($query)
+	public function user_search()
 	{
-		$user = $this->connection->get("users/search", ["count" => 25, "q" => $query]);
-
-		var_dump($user);
+		$user = array();
+		$data = array();
+		$query = $this->input->get('query', TRUE);
+		$result = $this->connection->get("users/search", ["count" => 25, "q" => $query]);
+		$user = $this->user;
+		$data['result'] = $result;
+		$data['query'] = $query;
+		$user->title = "Query Result";
+		$this->load->view("header", $user);
+		$this->load->view("input", $data);
+		$this->load->view("footer");
 	}
 
 	public function user_info($username)
 	{
 		$user = $this->connection->get("users/show", ["count" => 25, "screen_name" => $username]);
 
-		$this->load->view('user_info', $user);
+		$this->load->view("user_info", $user);
 	}
 }
