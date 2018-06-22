@@ -1,10 +1,15 @@
 <div class="profile-content">
-	<h2>Input Data</h2>
-	<form class="navbar-form" method="get" action="<?php echo base_url(); ?>twitter/user_search" role="search">
-		<div class="form-group">
-			<input type="text" name="query" class="form-control" placeholder="Search" value="<?php echo isset($query)? $query : ""; ?>" required>
-		</div>
-		<button type="submit" class="btn btn-success">Search</button>
+	<h2>Search Data</h2>
+	<form method="get" action="<?php echo base_url(); ?>twitter/user_search">
+		<div class="input-group">
+	    	<input type="text" name="query" class="form-control" placeholder="Search" value="<?php echo isset($query)? $query : ""; ?>" required>
+	    	
+	    	<div class="input-group-btn">
+	      		<button class="btn btn-success" type="submit">
+	        		<i class="glyphicon glyphicon-search"></i>
+	      		</button>
+	    	</div>
+	  	</div>
 	</form>
 
 	<hr>
