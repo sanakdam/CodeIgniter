@@ -1,12 +1,12 @@
 <div class="profile-content">
-  <div class="row">
-    <div class="col-md-8">
-      <h2><?php echo $category->name; ?></h2>
+    <div class="row">
+        <div class="col-md-8">
+            <h2><?php echo $category->name; ?></h2>
+        </div>
+        <div class="col-md-4">
+            <h2><a href="<?php echo base_url() . 'twitter/add_word/' . $category->id; ?>" class="btn btn-success">Add Word</a></h2>
+        </div>
     </div>
-    <div class="col-md-4">
-      <h2><a href="<?php echo base_url() . 'twitter/add_word/' . $category->id; ?>" class="btn btn-success">Add Word</a></h2>
-    </div>
-  </div>
 	<table class="table">
     <thead>
       	<tr>

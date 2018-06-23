@@ -183,13 +183,39 @@ class Twitter extends CI_Controller {
 
 	public function user_analyze()
 	{
+		$user = array();
+		$data = array();
+		$tweets = array();
 		$username = $this->input->get('username', TRUE);
-		$timeline = $this->connection->get("statuses/user_timeline", [
-			"screen_name" => $username, 
-			"exclude_replies" => true
-		]);
+		$since_id = 1;
 
-		var_dump($timeline);
+		function get_tweets($conn, $since_id, $tweets, $username)
+		{
+			$result = $conn->get("statuses/user_timeline", [
+				"count" => 200,
+				"since_id" => $since_id,
+				"screen_name" => $username,
+				"exclude_replies" => true
+			]);
+
+			if(count($result) == 200)
+			{
+				$tweets = array_merge($tweets, $result);
+				$since_idx = $result[count($result) - 1]->id;
+				return get_tweets($conn, $since_idx, $tweets, $username);
+			} else {
+				$tweets = array_merge($tweets, $result);
+				return $tweets;
+			}
+		}
+
+		$data['result'] = get_tweets($this->connection, $since_id, $tweets, $username);
+		$user = $this->user;
+		$user->title = "User Timeline";
+
+		$this->load->view("header", $user);
+		$this->load->view("analyze", $data);
+		$this->load->view("footer");
 	}
 
 	public function user_search()
