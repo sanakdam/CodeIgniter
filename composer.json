@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.4.8",
-		"abraham/twitteroauth": "^0.7.4"
+		"abraham/twitteroauth": "^0.7.4",
+		"sastrawi/sastrawi": "^1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

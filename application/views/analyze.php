@@ -4,7 +4,7 @@
             <h2>User Timeline</h2>
         </div>
         <div class="col-md-4">
-            <h2><a href="<?php echo base_url() . 'twitter/add_word/' . $category->id; ?>" class="btn btn-success">Proccess</a></h2>
+            <h2><a href="<?php echo base_url() . 'twitter/user_analyze_proccess/' . $username; ?>" class="btn btn-success">Proccess</a></h2>
         </div>
     </div>
 	<table class="table">

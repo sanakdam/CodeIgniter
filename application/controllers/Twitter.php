@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require "vendor/autoload.php";
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Sastrawi\Stemmer\StemmerFactory;
 
 class Twitter extends CI_Controller {
 	private $connection;
@@ -181,11 +182,69 @@ class Twitter extends CI_Controller {
 		var_dump($timeline);
 	}
 
+	public function user_analyze_proccess($username)
+	{
+		$this->load->helper('file');
+		$lines = file("./data/" . $username . ".txt", FILE_IGNORE_NEW_LINES);
+		$stopword = file("./data/stopword.txt", FILE_IGNORE_NEW_LINES);
+		$stemmerFactory = new StemmerFactory();
+		$stemmer  = $stemmerFactory->createStemmer();
+		$result = array();
+
+		function tokenizing($words)
+		{
+			$result = array();
+			$explode = explode(' ', $words);
+			$delimiter = array( '\'', '"', ',' , ';', '<', '>', '.' );
+			foreach ($explode as $word) {
+				if (!filter_var($word, FILTER_VALIDATE_URL)) {
+				    $result[] = str_replace($delimiter, '', $word);
+				}
+			}
+
+			return $result;
+		}
+
+		function removal($tokenizing, $stopword)
+		{
+			$result = array();
+			foreach ($tokenizing as $token) 
+			{
+				if(!in_array($token, $stopword))
+				{
+					$result[] = $token;
+				}
+			}
+
+			return $result;
+		}
+
+		function stemming($stemmer, $removal)
+		{
+			$result = array();
+			foreach ($removal as $rm) {
+				$result[] = $stemmer->stem($rm);
+			}
+
+			return $result;
+		}
+		
+		foreach ($lines as $line) {
+			$words = strtolower($line);
+			$tokenizing = tokenizing($words);
+			$removal = removal($tokenizing, $stopword);
+			$stemming = stemming($stemmer, $removal);
+			die(var_dump($stemming));
+		}
+	}
+
 	public function user_analyze()
 	{
 		$user = array();
 		$data = array();
+		$result = array();
 		$tweets = array();
+		$this->load->helper('file');
 		$username = $this->input->get('username', TRUE);
 		$since_id = 1;
 
@@ -209,7 +268,17 @@ class Twitter extends CI_Controller {
 			}
 		}
 
-		$data['result'] = get_tweets($this->connection, $since_id, $tweets, $username);
+		$result = get_tweets($this->connection, $since_id, $tweets, $username);
+		
+		foreach ($result as $data) {
+			$text = str_replace( "\n", " ", $data->text); 
+			if ( !write_file("./data/" . $username . ".txt", (string)$text . "\n", "a+")){
+		    	echo 'Unable to write the file';
+			}
+		}
+
+		$data->result = $result;
+		$data->username = $username;
 		$user = $this->user;
 		$user->title = "User Timeline";
 
