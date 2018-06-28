@@ -29,12 +29,13 @@ class Twitter extends CI_Controller {
 
 	public function index()
 	{
-		$user = array();
-		$user = $this->user;
-		$user->title = "Overview";
-		$this->load->view("header", $user);
-		$this->load->view("admin_info", $user);
-		$this->load->view("footer");
+		return redirect('/twitter/input');
+		// $user = array();
+		// $user = $this->user;
+		// $user->title = "Overview";
+		// $this->load->view("header", $user);
+		// $this->load->view("admin_info", $user);
+		// $this->load->view("footer");
 	}
 
 	public function input()
@@ -184,12 +185,36 @@ class Twitter extends CI_Controller {
 
 	public function user_analyze_proccess($username)
 	{
-		$this->load->helper('file');
-		$lines = file("./data/" . $username . ".txt", FILE_IGNORE_NEW_LINES);
-		$stopword = file("./data/stopword.txt", FILE_IGNORE_NEW_LINES);
 		$stemmerFactory = new StemmerFactory();
 		$stemmer  = $stemmerFactory->createStemmer();
-		$result = array();
+		$train = array();
+		$stem = array();
+		$data = array();
+		$user = array();
+		$train["n"] = 0;
+
+		$this->load->helper('file');
+		$this->load->model('category_model');
+		$this->load->model('subcategory_model');
+		$this->load->model('history_model');
+		$category = $this->category_model->index();
+		$n = $this->subcategory_model->index();
+		$train["n"] = count($n);
+
+		foreach ($category as $data) 
+		{
+			$data_train = array();
+			$subcategory = $this->subcategory_model->findByCategory($data->id);
+			$data_train["class_name"] = $data->name;
+			$data_train["class_n"] = count($subcategory);
+			$data_train["class_prob"] = count($subcategory) / $train["n"];
+			$data_train["class_list"] = $subcategory;
+
+			$train["data"][] = $data_train;
+		}
+
+		$lines = file("./data/" . $username . ".txt", FILE_IGNORE_NEW_LINES);
+		$stopword = file("./data/stopword.txt", FILE_IGNORE_NEW_LINES);
 
 		function tokenizing($words)
 		{
@@ -228,14 +253,54 @@ class Twitter extends CI_Controller {
 
 			return $result;
 		}
+
+		function naive_bayes($train, $stem)
+		{
+			$result = array();
+
+			foreach ($train["data"] as $data) 
+			{
+				$res_data = array();
+				$count = 0;
+				$res_data["name"] = $data["class_name"];
+				$res_data["prob"] = $data["class_prob"];
+				$res_data["n"] = $data["class_n"];
+				$counts = array_count_values($stem);
+
+				foreach ($data["class_list"] as $list) 
+				{
+					if(isset($counts[$list->name])) {
+						$count += $counts[$list->name];
+					}
+				}
+
+				$res_data["Xi_Y"] = $count / $res_data["n"];
+				$res_data["bayes"] = $res_data["Xi_Y"] * $res_data["prob"];
+
+				$result["data"][] = $res_data;
+			}
+
+			$result["n"] = $train["n"];
+			return $result;
+		}
 		
 		foreach ($lines as $line) {
 			$words = strtolower($line);
 			$tokenizing = tokenizing($words);
 			$removal = removal($tokenizing, $stopword);
 			$stemming = stemming($stemmer, $removal);
-			die(var_dump($stemming));
+			$stem = array_merge($stem, $stemming);
 		}
+
+		$data->result = naive_bayes($train, $stem);
+		$data->username = $username;
+		$user = $this->user;
+		$user->title = "Naive Bayes Result";
+		$this->history_model->create($username, json_encode($data->result, true));
+
+		$this->load->view("header", $user);
+		$this->load->view("bayes_result", $data);
+		$this->load->view("footer");
 	}
 
 	public function user_analyze()
@@ -284,6 +349,22 @@ class Twitter extends CI_Controller {
 
 		$this->load->view("header", $user);
 		$this->load->view("analyze", $data);
+		$this->load->view("footer");
+	}
+
+	public function user_history()
+	{
+		$user = array();
+		$data = array();
+
+		$this->load->model('history_model');
+		$data['result'] = $this->history_model->index();
+
+		$user = $this->user;
+		$user->title = "History";
+
+		$this->load->view("header", $user);
+		$this->load->view("history", $data);
 		$this->load->view("footer");
 	}
 

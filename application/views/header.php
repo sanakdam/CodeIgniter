@@ -42,33 +42,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 				<!-- END SIDEBAR USER TITLE -->
 				<!-- SIDEBAR BUTTONS -->
-				<div class="profile-userbuttons">
+				<!-- <div class="profile-userbuttons">
 					<button type="button" class="btn btn-success btn-sm">Follow</button>
 					<button type="button" class="btn btn-danger btn-sm">Message</button>
-				</div>
+				</div> -->
 				<!-- END SIDEBAR BUTTONS -->
 				<!-- SIDEBAR MENU -->
 				<div class="profile-usermenu">
 					<ul class="nav">
-						<li class="<?php echo uri_string() == "twitter"? "active": ""; ?>">
-							<a href="<?php echo base_url(); ?>twitter">
-							<i class="glyphicon glyphicon-home"></i>
-							Overview </a>
-						</li>
-						<li class="<?php echo uri_string() == "twitter/input"? "active": ""; ?>">
+						<li class="<?php echo uri_string() == "" || uri_string() == "twitter" || uri_string() == "twitter/input"? "active": ""; ?>">
 							<a href="<?php echo base_url(); ?>twitter/input">
-							<i class="glyphicon glyphicon-user"></i>
-							Input </a>
+							<i class="glyphicon glyphicon-home"></i>
+							Beranda </a>
 						</li>
 						<li class="<?php echo uri_string() == "twitter/category"? "active": ""; ?>">
 							<a href="<?php echo base_url(); ?>twitter/category">
 							<i class="glyphicon glyphicon-ok"></i>
 							Category </a>
 						</li>
-						<li>
-							<a href="#help">
+						<li class="<?php echo uri_string() == "twitter/user_history"? "active": ""; ?>">
+							<a href="<?php echo base_url(); ?>twitter/user_history">
 							<i class="glyphicon glyphicon-flag"></i>
-							Help </a>
+							History </a>
 						</li>
 					</ul>
 				</div>
