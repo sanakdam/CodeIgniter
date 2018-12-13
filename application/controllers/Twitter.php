@@ -334,6 +334,10 @@ class Twitter extends CI_Controller {
 		}
 
 		$result = get_tweets($this->connection, $since_id, $tweets, $username);
+
+		if (file_exists("./data/" . $username . ".txt")) {
+		    unlink("./data/" . $username . ".txt");
+		}
 		
 		foreach ($result as $data) {
 			$text = str_replace( "\n", " ", $data->text); 

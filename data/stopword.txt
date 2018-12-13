@@ -148,7 +148,6 @@ berkali
 berkali-kali
 berkata
 berkehendak
-berkeinginan
 berkenaan
 berlainan
 berlaku
@@ -263,7 +262,6 @@ diibaratkan
 diibaratkannya
 diingat
 diingatkan
-diinginkan
 dijangka
 dijawab
 dijelaskan
@@ -408,9 +406,6 @@ industri
 informasi
 ingat
 inggris
-ingin
-inginkah
-inginkan
 ini
 inikah
 inilah
@@ -509,7 +504,6 @@ keduanya
 kedudukan
 kegiatan
 kehidupan
-keinginan
 kejadian
 kekal
 kelamaan
@@ -720,7 +714,6 @@ mengibaratkannya
 mengikut
 mengingat
 mengingatkan
-menginginkan
 mengira
 mengucapkan
 mengucapkannya
@@ -762,8 +755,6 @@ meski
 meskipun
 mesyuarat
 metrotv
-meyakini
-meyakinkan
 milik
 militer
 minat
@@ -1119,14 +1110,12 @@ setempat
 setengah
 seterusnya
 setiap
-setiausaha
 setiba
 setibanya
 setidak
 setidaknya
 setinggi
 seusai
-sewaktu
 siap
 siapa
 siapakah
@@ -1278,7 +1267,6 @@ untung
 upaya
 urus
 usah
-usaha
 usai
 user
 utama
@@ -1289,8 +1277,6 @@ waduh
 wah
 wahai
 wakil
-waktu
-waktunya
 walau
 walaupun
 wang
@@ -1303,7 +1289,6 @@ wong
 word
 ya
 yaitu
-yakin
 yakni
 yang
 zaman
